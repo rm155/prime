@@ -170,9 +170,14 @@ end
 class Prime
 
   VERSION = "0.1.2"
+  VERSION.freeze
 
   include Enumerable
-  include Singleton
+  if defined?(Ractor)
+    include RactorLocalSingleton
+  else
+    include Singleton
+  end
 
   class << self
     extend Forwardable
@@ -474,7 +479,11 @@ class Prime
 
   # Internal use. An implementation of prime table by trial division method.
   class TrialDivision
-    include Singleton
+    if defined?(Ractor)
+      include RactorLocalSingleton
+    else
+      include Singleton
+    end
 
     def initialize # :nodoc:
       # These are included as class variables to cache them for later uses.  If memory
@@ -515,7 +524,11 @@ class Prime
 
   # Internal use. An implementation of Eratosthenes' sieve
   class EratosthenesSieve
-    include Singleton
+    if defined?(Ractor)
+      include RactorLocalSingleton
+    else
+      include Singleton
+    end
 
     def initialize
       @primes = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97, 101]
